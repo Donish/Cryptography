@@ -10,10 +10,7 @@ public class BitOperator implements IBitOperator {
             throw new RuntimeException("null arg provided");
         }
         for (int el : pBlock) {
-            if ((el == 0 && startRule == firstBit.ONE) ||
-                    el < 0 ||
-                    (startRule == firstBit.ZERO && el >= source.length * 8) ||
-                    (startRule == firstBit.ONE && el > source.length * 8))
+            if ((el == 0 && startRule == firstBit.ONE) || el < 0 || (startRule == firstBit.ZERO && el >= source.length * 8) || (startRule == firstBit.ONE && el > source.length * 8))
                 throw new RuntimeException("incorrect pBlock elements");
         }
 
@@ -48,7 +45,16 @@ public class BitOperator implements IBitOperator {
     }
 
     private void senToJunPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
-        int firstBitIdx = pBlock.length % 8;
+        byte temp;
+        for (int i = 0; i < pBlock.length; i++) {
+            int byteIdx = (pBlock[i] - offset) / 8;
+            temp = source[byteIdx];
+            int bitIdx = (pBlock[i] - offset) % 8;
+            int bit = (temp >> (7 - bitIdx)) & 1;
 
+            int resultByteIdx = result.length - ((pBlock.length - (i + 1)) / 8) - 1;
+            result[resultByteIdx] <<= 1;
+            result[resultByteIdx] |= (byte) bit;
+        }
     }
 }
