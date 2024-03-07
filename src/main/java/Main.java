@@ -10,7 +10,7 @@ public class Main {
         source[1] = 3;
         source[2] = 103;
 
-        int[] pBlock = {22, 23, 21, 20, 22, 23, 20, 1, 5, 12, 8, 9, 21, 23, 5, 4, 9, 11, 1};
+        int[] pBlock = {22, 23, 21, 20, 22, 23, 20, 1, 5, 12, 8, 9, 21, 23, 5, 5, 23, 21, 22};
 
         byte[] permuted = bitOperator.bitPermutation(source, pBlock,
                 IBitOperator.bitIndexing.senior_to_junior,
