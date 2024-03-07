@@ -28,7 +28,6 @@ public class BitOperator implements IBitOperator {
         return result;
     }
 
-    //    indexing from zero
     private void junToSenPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
         byte temp;
         for (int i = 0; i < pBlock.length; i++) {
