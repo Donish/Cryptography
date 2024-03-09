@@ -31,8 +31,7 @@ public class BitOperator implements IBitOperator {
     private void junToSenPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
         byte temp;
         for (int i = 0; i < pBlock.length; i++) {
-            int byteIdx = (pBlock[i] - offset) / 8;
-            byteIdx = source.length - byteIdx - 1;
+            int byteIdx = source.length - ((pBlock[i] - offset) / 8) - 1;
             temp = source[byteIdx];
             int bitIdx = (pBlock[i] - offset) % 8;
             int bit = (temp >> bitIdx) & 1;
