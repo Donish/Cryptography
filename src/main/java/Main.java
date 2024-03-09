@@ -1,3 +1,4 @@
+import org.example.IBitOperator;
 import org.example.impl.BitOperator;
 
 public class Main {
@@ -6,16 +7,14 @@ public class Main {
 
         byte[] source = new byte[3];
         source[0] = 5;
-        source[1] = -3;
+        source[1] = 3;
         source[2] = 103;
-        System.out.println(Integer.toBinaryString(-5));
-        System.out.println(Integer.toBinaryString(5));
 
-        int[] pBlock = {1, 5, 12, 8, 15, 21, 23, 5, 4, 9, 11, 0};
+        int[] pBlock = {4, 7, 6, 3, 1, 5, 8, 7, 1, 2, 4, 5, 4, 2, 6, 3};
 
         byte[] permuted = bitOperator.bitPermutation(source, pBlock,
-                BitOperator.bitIndexing.junior_to_senior,
-                BitOperator.firstBit.ZERO);
+                BitOperator.bitIndexing.senior_to_junior,
+                BitOperator.firstBit.ONE);
 
         for (byte el : permuted) {
             System.out.println(el);
