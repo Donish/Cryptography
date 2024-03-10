@@ -1,8 +1,8 @@
-package org.example.impl;
+package org.example.utils;
 
-import org.example.interfaces.IBitOperator;
+import org.example.interfaces.IBitUtils;
 
-public class BitOperator implements IBitOperator {
+public class BitUtils implements IBitUtils {
 
     @Override
     public byte[] bitPermutation(byte[] source, int[] pBlock, BitIndexing indexRule, FirstBit startRule) {

@@ -1,6 +1,6 @@
 package org.example.interfaces;
 
-public interface IBitOperator {
+public interface IBitUtils {
 
     public enum BitIndexing {
         SENIOR_TO_JUNIOR,
