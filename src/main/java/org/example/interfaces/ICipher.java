@@ -8,6 +8,6 @@ public interface ICipher {
 
     public byte[] decrypt(byte[] block);
 
-    List<byte[]> getRKeys(byte[] key);
+    public List<byte[]> getRKeys(byte[] key);
 
 }

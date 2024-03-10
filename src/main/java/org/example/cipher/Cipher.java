@@ -1,4 +1,4 @@
-package org.example.impl;
+package org.example.cipher;
 
 import org.example.interfaces.ICipher;
 

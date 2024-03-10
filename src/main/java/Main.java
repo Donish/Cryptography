@@ -1,6 +1,4 @@
 import org.example.impl.BitOperator;
-import org.example.impl.Cipher;
-import org.example.interfaces.IBitOperator;
 
 public class Main {
     public static void main(String[] args) {
