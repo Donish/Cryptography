@@ -1,8 +1,5 @@
-import org.example.interfaces.IBitUtils;
-import org.example.padding_impl.ANSIX923Padding;
-import org.example.padding_impl.ISO10126Padding;
-import org.example.padding_impl.PKCS7Padding;
-import org.example.padding_impl.ZerosPadding;
+import org.example.impl.padding_impl.ISO10126Padding;
+import org.example.impl.padding_impl.ZerosPadding;
 import org.example.utils.BitUtils;
 
 public class Main {
