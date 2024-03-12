@@ -55,4 +55,8 @@ public class BitUtils implements IBitUtils {
             result[resultByteIdx] |= (byte) bit;
         }
     }
+
+    public static int getUnsignedByte(byte number) {
+        return number & 0xFF;
+    }
 }
