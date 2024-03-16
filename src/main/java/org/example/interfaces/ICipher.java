@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ICipher {
 
-    public byte[] encrypt(byte[] block);
+    public byte[] encrypt(byte[] text);
 
-    public byte[] decrypt(byte[] block);
+    public byte[] decrypt(byte[] text);
 
     public List<byte[]> getRKeys(byte[] key);
 

@@ -2,6 +2,8 @@ package org.example.utils;
 
 import org.example.interfaces.IBitUtils;
 
+import java.util.Arrays;
+
 public class BitUtils implements IBitUtils {
 
     @Override
@@ -58,5 +60,45 @@ public class BitUtils implements IBitUtils {
 
     public static int getUnsignedByte(byte number) {
         return number & 0xFF;
+    }
+
+    public static byte[] getBlock(byte[] text, int bitBlockSize, int idx) {
+        int byteBlockSize = bitBlockSize / 8;
+        if (text.length - idx < byteBlockSize) {
+            return Arrays.copyOfRange(text, idx, text.length);
+        }
+        return Arrays.copyOfRange(text, idx, idx + byteBlockSize);
+    }
+
+    public static byte[] xorArrays(byte[] firstArr, byte[] secondArr) {
+        byte[] result = new byte[Math.max(firstArr.length, secondArr.length)];
+        byte[] largeArr, smallArr;
+        if (firstArr.length > secondArr.length) {
+            largeArr = firstArr.clone();
+            smallArr = secondArr.clone();
+        } else {
+            largeArr = secondArr.clone();
+            smallArr = firstArr.clone();
+        }
+        int diff = largeArr.length - smallArr.length;
+
+        for (int i = result.length - 1; i >= 0; i--) {
+            result[i] = (byte) (largeArr[i] ^ smallArr[i - diff]);
+        }
+        if(diff > 0) {
+            System.arraycopy(largeArr, 0, result, 0, diff);
+        }
+
+        return result;
+    }
+
+    public static long byteArrToLong(byte[] array) {
+        long result = 0;
+        for (byte el : array) {
+            result <<= 8;
+            result |= el;
+        }
+
+        return result;
     }
 }
