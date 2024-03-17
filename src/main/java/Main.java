@@ -2,6 +2,11 @@ import org.example.impl.padding_impl.ISO10126Padding;
 import org.example.impl.padding_impl.ZerosPadding;
 import org.example.utils.BitUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         BitUtils bitUtils = new BitUtils();
@@ -11,8 +16,32 @@ public class Main {
         source[1] = 3;
         source[2] = 103;
 
-        long res = BitUtils.byteArrToLong(source);
-        System.out.println(Long.toBinaryString(res));
+        byte[] source2 = new byte[3];
+        source2[0] = 10;
+        source2[1] = 23;
+        source2[2] = 56;
+        List<byte[]> list = new ArrayList<>();
+        list.add(source);
+        list.add(source2);
+
+        byte[] text = new byte[10];
+        for (int i = 0; i < 10; i++) {
+            text[i] = (byte) (i + 1);
+        }
+
+
+//        byte[] fBlock = BitUtils.getBlock(text, 64, 0);
+//        byte[] sBlock = BitUtils.getBlock(text, 64, 8);
+//        for (var el : fBlock) {
+//            System.out.println(el);
+//        }
+//        System.out.println();
+//        for (var el : sBlock) {
+//            System.out.println(el);
+//        }
+//        System.arraycopy(source, 0, result, result.length, source.length);
+
+
 //
 //        ZerosPadding zerosPadding = new ZerosPadding();
 //        byte[] result_zeros = zerosPadding.padBlock(source, 64);
