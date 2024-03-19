@@ -1,3 +1,5 @@
+import org.example.DES.DES;
+import org.example.cipher.CipherService;
 import org.example.impl.padding_impl.ISO10126Padding;
 import org.example.impl.padding_impl.ZerosPadding;
 import org.example.utils.BitUtils;
@@ -6,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,6 +32,11 @@ public class Main {
             text[i] = (byte) (i + 1);
         }
 
+        int num = -8;
+        System.out.println(Integer.toBinaryString(num));
+        int other = num >> 1;
+        System.out.println(other);
+        System.out.println(Integer.toBinaryString(other));
 
 //        byte[] fBlock = BitUtils.getBlock(text, 64, 0);
 //        byte[] sBlock = BitUtils.getBlock(text, 64, 8);
@@ -70,6 +78,6 @@ public class Main {
 //        System.out.print("Padded bytes: ");
 //        System.out.println(BitUtils.getUnsignedByte(result_rsa[result_rsa.length - 1]));
 
-
+//        CipherService cipherService = new CipherService(source, CipherService.CipherMode.ECB, CipherService.Padding.ZEROS);
     }
 }

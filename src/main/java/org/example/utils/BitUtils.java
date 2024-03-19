@@ -1,13 +1,20 @@
 package org.example.utils;
 
-import org.example.interfaces.IBitUtils;
-
 import java.util.Arrays;
 
-public class BitUtils implements IBitUtils {
+public class BitUtils {
 
-    @Override
-    public byte[] bitPermutation(byte[] source, int[] pBlock, BitIndexing indexRule, FirstBit startRule) {
+    public enum BitIndexing {
+        SENIOR_TO_JUNIOR,
+        JUNIOR_TO_SENIOR
+    }
+
+    public enum FirstBit {
+        ZERO,
+        ONE
+    }
+
+    public static byte[] bitPermutation(byte[] source, int[] pBlock, BitIndexing indexRule, FirstBit startRule) {
         if (source == null || pBlock == null || indexRule == null || startRule == null) {
             throw new RuntimeException("null arg provided");
         }
@@ -30,7 +37,7 @@ public class BitUtils implements IBitUtils {
         return result;
     }
 
-    private void junToSenPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
+    private static void junToSenPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
         byte temp;
         for (int i = 0; i < pBlock.length; i++) {
             int byteIdx = source.length - ((pBlock[i] - offset) / 8) - 1;
@@ -44,7 +51,7 @@ public class BitUtils implements IBitUtils {
         }
     }
 
-    private void senToJunPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
+    private static void senToJunPermutation(byte[] source, byte[] result, int[] pBlock, int offset) {
         byte temp;
         for (int i = 0; i < pBlock.length; i++) {
             int byteIdx = (pBlock[i] - offset) / 8;
@@ -99,6 +106,15 @@ public class BitUtils implements IBitUtils {
             result |= el;
         }
 
+        return result;
+    }
+
+    public static byte[] intToByteArr(int num) {
+        byte[] result = new byte[4];
+        for (int i = 3; i >= 0; i--) {
+            result[i] = (byte) (num & 0xFF);
+            num >>>=8;
+        }
         return result;
     }
 }

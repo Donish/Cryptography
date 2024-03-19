@@ -5,20 +5,21 @@ import org.example.impl.padding_impl.ANSIX923Padding;
 import org.example.impl.padding_impl.ISO10126Padding;
 import org.example.impl.padding_impl.PKCS7Padding;
 import org.example.impl.padding_impl.ZerosPadding;
-import org.example.interfaces.ICipher;
+import org.example.interfaces.IAlgorithm;
 import org.example.interfaces.ICipherMode;
 import org.example.interfaces.IPadding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cipher implements ICipher {
+public class CipherService {
 
     protected byte[] key;
     protected ICipherMode cipherMode;
     protected IPadding padding;
     protected byte[] IV = null;
     protected List<String> modeArgs = null;
+    protected IAlgorithm algorithm;
 
     public enum CipherMode {
         ECB, CBC, PCBC, CFB, OFB, CTR, RandomDelta
@@ -28,9 +29,9 @@ public class Cipher implements ICipher {
         ZEROS, ANSIX923, PKCS7, ISO10126
     }
 
-    public Cipher(byte[] key, CipherMode cipherMode, Padding padding) {
+    public CipherService(byte[] key, CipherMode cipherMode, Padding padding, IAlgorithm algorithm) {
         if (key == null) {
-            throw new RuntimeException("passed null key to Cipher");
+            throw new RuntimeException("passed null key to CipherService");
         }
         this.key = key;
 
@@ -43,7 +44,7 @@ public class Cipher implements ICipher {
         } else if (padding == Padding.ISO10126) {
             this.padding = new ISO10126Padding();
         } else {
-            throw new RuntimeException("passed incorrect padding to Cipher");
+            throw new RuntimeException("passed incorrect padding to CipherService");
         }
 
         if (cipherMode == CipherMode.ECB) {
@@ -61,12 +62,22 @@ public class Cipher implements ICipher {
         } else if (cipherMode == CipherMode.RandomDelta) {
             this.cipherMode = new RandomDeltaMode();
         } else {
-            throw new RuntimeException("passed incorrect cipherMode to Cipher");
+            throw new RuntimeException("passed incorrect cipherMode to CipherService");
         }
+
+        if (algorithm == null) {
+            throw new RuntimeException("passed null algorithm to CipherService");
+        }
+        this.algorithm = algorithm;
     }
 
-    public Cipher(byte[] key, CipherMode cipherMode, Padding padding, byte[] IV, List<String> modeArgs) {
-        this(key, cipherMode, padding);
+    public CipherService(byte[] key,
+                         CipherMode cipherMode,
+                         Padding padding,
+                         IAlgorithm algorithm,
+                         byte[] IV,
+                         List<String> modeArgs) {
+        this(key, cipherMode, padding, algorithm);
 
         if (IV == null || modeArgs == null) {
             throw new RuntimeException("passed null to Cipher");
@@ -75,7 +86,6 @@ public class Cipher implements ICipher {
         this.modeArgs = new ArrayList<>(modeArgs);
     }
 
-    @Override
     public byte[] encrypt(byte[] text) {
         return new byte[0];
     }
@@ -83,7 +93,7 @@ public class Cipher implements ICipher {
     public void encrypt(String inputFilename, String outputFilename) {
     }
 
-    @Override
+
     public byte[] decrypt(byte[] text) {
         return new byte[0];
     }
@@ -91,8 +101,4 @@ public class Cipher implements ICipher {
     public void decrypt(String inputFilename, String outputFilename) {
     }
 
-    @Override
-    public List<byte[]> getRKeys(byte[] key) {
-        return null;
-    }
 }

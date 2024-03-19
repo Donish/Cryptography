@@ -18,7 +18,7 @@ public class ECBMode implements ICipherMode {
         int blocksCount = text.length % blockSizeInBytes == 0 ?
                 text.length / blockSizeInBytes :
                 text.length / blockSizeInBytes + 1;
-        boolean isFit = text.length / blockSizeInBytes == blocksCount;
+//        boolean isFit = text.length / blockSizeInBytes == blocksCount;
         byte[] block;
         List<Future<byte[]>> futures = new ArrayList<>();
         byte[] result;
@@ -27,9 +27,9 @@ public class ECBMode implements ICipherMode {
 
         for (int i = 0; i < blocksCount; i++) {
             block = BitUtils.getBlock(text, blockSizeInBits, i * blockSizeInBytes);
-            if (!isFit) {
-                block = padding.padBlock(block, blockSizeInBits);
-            }
+//            if (!isFit) {
+//                block = padding.padBlock(block, blockSizeInBits);
+//            }
 
             list.add(cipher.encrypt(block));
             //TODO: многопоточно шифруем блок и кладем результат во future, затем вытаскиваем в массив байтов
@@ -38,7 +38,8 @@ public class ECBMode implements ICipherMode {
         result = list.stream()
                 .collect(ByteArrayOutputStream::new,
                         (b, e) -> b.write(e, 0, e.length),
-                        (a, b) -> {}).toByteArray();
+                        (a, b) -> {
+                        }).toByteArray();
 
         return result;
     }
@@ -69,7 +70,8 @@ public class ECBMode implements ICipherMode {
         result = list.stream()
                 .collect(ByteArrayOutputStream::new,
                         (b, e) -> b.write(e, 0, e.length),
-                        (a, b) -> {}).toByteArray();
+                        (a, b) -> {
+                        }).toByteArray();
 
         return result;
     }

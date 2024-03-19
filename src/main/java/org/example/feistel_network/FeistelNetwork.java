@@ -8,10 +8,8 @@ import org.example.utils.BitUtils;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO: наследовать от Cipher или от ICipher
 public class FeistelNetwork implements ICipher {
 
-    protected final byte[] key;
     protected final List<byte[]> RKeys;
     protected final ICipherConversion feistelConversion;
     protected final IRoundKeyGenerator keyGenerator;
@@ -25,7 +23,6 @@ public class FeistelNetwork implements ICipher {
             throw new RuntimeException("null passed to FeistelNetwork");
         }
 
-        this.key = key;
         this.feistelConversion = cipherConversion;
         this.keyGenerator = keyGenerator;
         this.RKeys = getRKeys(key);
@@ -38,7 +35,7 @@ public class FeistelNetwork implements ICipher {
         byte[] rightBlock = Arrays.copyOfRange(block, block.length / 2, block.length);
         byte[] leftPrev;
 
-        for(int i = 0; i < this.roundsCount; i++) {
+        for (int i = 0; i < this.roundsCount; i++) {
             leftPrev = leftBlock.clone();
             leftBlock = rightBlock.clone();
             rightBlock = BitUtils.xorArrays(leftPrev, feistelConversion.convert(rightBlock, this.RKeys.get(i)));
