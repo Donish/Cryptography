@@ -23,7 +23,15 @@ public final class DES implements IAlgorithm {
     private final FeistelNetwork feistelNetwork;
 
     public DES(byte[] key) {
+        if (!isValidKey(key)) {
+            throw new RuntimeException("passed invalid key to DES");
+        }
         this.feistelNetwork = new FeistelNetwork(key, new DESKeyGenerator(), new DESConversion(), 16);
+    }
+
+    private boolean isValidKey(byte[] key) {
+        //TODO: validate key
+        return true;
     }
 
     @Override
@@ -49,7 +57,8 @@ public final class DES implements IAlgorithm {
 
         block = BitUtils.bitPermutation(block, PBlock, BitUtils.BitIndexing.SENIOR_TO_JUNIOR, BitUtils.FirstBit.ONE);
         block = feistelNetwork.encrypt(block);
-        return new byte[0];
+        //TODO: ending permutation
+        return block;
     }
 
     @Override

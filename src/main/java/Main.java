@@ -19,24 +19,16 @@ public class Main {
         source[1] = 3;
         source[2] = 103;
 
-        byte[] source2 = new byte[3];
-        source2[0] = 10;
-        source2[1] = 23;
-        source2[2] = 56;
-        List<byte[]> list = new ArrayList<>();
-        list.add(source);
-        list.add(source2);
+//        int num = 49478;
+//        System.out.println(Integer.toBinaryString(num));
+//        int res = BitUtils.lCircularShift(num, 16, 30);
+//        System.out.println(res);
+//        System.out.println(Integer.toBinaryString(res));
+        long num = 1;
+        num <<= 62;
+        System.out.println(num);
+        System.out.println(Long.toBinaryString(num));
 
-        byte[] text = new byte[10];
-        for (int i = 0; i < 10; i++) {
-            text[i] = (byte) (i + 1);
-        }
-
-        int num = -8;
-        System.out.println(Integer.toBinaryString(num));
-        int other = num >> 1;
-        System.out.println(other);
-        System.out.println(Integer.toBinaryString(other));
 
 //        byte[] fBlock = BitUtils.getBlock(text, 64, 0);
 //        byte[] sBlock = BitUtils.getBlock(text, 64, 8);

@@ -105,7 +105,24 @@ public class BitUtils {
             result <<= 8;
             result |= el;
         }
+        return result;
+    }
 
+    public static byte[] longToByteArr(long num, int byteSize) {
+        byte[] result = new byte[byteSize];
+        for (int i = byteSize - 1; i >= 0; i--) {
+            result[i] = (byte) (num & 0xFF);
+            num >>>=8;
+        }
+        return result;
+    }
+
+    public static int byteArrToInt(byte[] array) {
+        int result = 0;
+        for (byte el : array) {
+            result <<= 8;
+            result |= el;
+        }
         return result;
     }
 
@@ -116,5 +133,16 @@ public class BitUtils {
             num >>>=8;
         }
         return result;
+    }
+
+    public static int lCircularShift(int num, int numBitSize, int count) {
+        int mask = (1 << numBitSize) - 1;
+        count %= numBitSize;
+
+        return ((num << count) & mask) | (num >>> (numBitSize - count));
+    }
+
+    public static int rCircularShift(int num, int numBitSize, int count) {
+        return 0;
     }
 }
