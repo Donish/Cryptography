@@ -145,4 +145,12 @@ public class BitUtils {
     public static int rCircularShift(int num, int numBitSize, int count) {
         return 0;
     }
+
+    public static int countUnits(byte num) {
+        int count = 0;
+        for (int i = 0; i < 8; i++) {
+            if (((num >>> i) & 1) == 1) count++;
+        }
+        return count;
+    }
 }

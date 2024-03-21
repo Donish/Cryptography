@@ -12,22 +12,39 @@ import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
-        BitUtils bitUtils = new BitUtils();
+        byte[] key = {0x25, 0x25, 0x25, 0x25, 0x25, 0x25, 0x25, 0x25};
+        DES des = new DES(key);
 
-        byte[] source = new byte[3];
-        source[0] = 5;
-        source[1] = 3;
-        source[2] = 103;
+        byte[] source = {5, 3, 103, 25, 76, 30, 12, 4};
+        byte[] ciphered = des.encryptBlock(source);
+        for (var el : source) {
+            System.out.print(el);
+            System.out.print(" ");
+        }
+        System.out.println();
+
+        for (var el : ciphered) {
+            System.out.print(el);
+            System.out.print(" ");
+        }
+        System.out.println();
+
+        byte[] decrypted = des.decryptBlock(ciphered);
+        for (var el : decrypted) {
+            System.out.print(el);
+            System.out.print(" ");
+        }
+        System.out.println();
 
 //        int num = 49478;
 //        System.out.println(Integer.toBinaryString(num));
 //        int res = BitUtils.lCircularShift(num, 16, 30);
 //        System.out.println(res);
 //        System.out.println(Integer.toBinaryString(res));
-        long num = 1;
-        num <<= 62;
-        System.out.println(num);
-        System.out.println(Long.toBinaryString(num));
+//        long num = 1;
+//        num <<= 62;
+//        System.out.println(num);
+//        System.out.println(Long.toBinaryString(num));
 
 
 //        byte[] fBlock = BitUtils.getBlock(text, 64, 0);

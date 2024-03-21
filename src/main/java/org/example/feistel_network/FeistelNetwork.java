@@ -43,7 +43,7 @@ public class FeistelNetwork implements ICipher {
 
         byte[] result = new byte[block.length];
         System.arraycopy(rightBlock, 0, result, 0, rightBlock.length);
-        System.arraycopy(leftBlock, 0, result, leftBlock.length, result.length);
+        System.arraycopy(leftBlock, 0, result, leftBlock.length, leftBlock.length);
         return result;
     }
 
@@ -61,7 +61,7 @@ public class FeistelNetwork implements ICipher {
 
         byte[] result = new byte[block.length];
         System.arraycopy(rightBlock, 0, result, 0, rightBlock.length);
-        System.arraycopy(leftBlock, 0, result, leftBlock.length, result.length);
+        System.arraycopy(leftBlock, 0, result, leftBlock.length, leftBlock.length);
         return result;
     }
 
