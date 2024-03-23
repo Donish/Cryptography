@@ -1,14 +1,5 @@
-import org.example.DES.DES;
+import org.example.Algorithm.DES;
 import org.example.cipher.CipherService;
-import org.example.impl.padding_impl.ISO10126Padding;
-import org.example.impl.padding_impl.ZerosPadding;
-import org.example.utils.BitUtils;
-
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,6 +26,8 @@ public class Main {
             System.out.print(" ");
         }
         System.out.println();
+
+        CipherService cipherService = new CipherService(key, CipherService.CipherMode.ECB, CipherService.Padding.ZEROS, des);
 
 //        int num = 49478;
 //        System.out.println(Integer.toBinaryString(num));
