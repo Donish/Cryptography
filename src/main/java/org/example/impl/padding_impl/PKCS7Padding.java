@@ -1,6 +1,9 @@
 package org.example.impl.padding_impl;
 
 import org.example.interfaces.IPadding;
+import org.example.utils.BitUtils;
+
+import java.util.Arrays;
 
 public class PKCS7Padding implements IPadding {
 
@@ -16,6 +19,12 @@ public class PKCS7Padding implements IPadding {
         }
 
         return result;
+    }
+
+    @Override
+    public byte[] removePadding(byte[] block) {
+        int count = BitUtils.getUnsignedByte(block[block.length - 1]);
+        return Arrays.copyOf(block, block.length - count);
     }
 
 }

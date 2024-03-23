@@ -19,4 +19,16 @@ public class ZerosPadding implements IPadding {
         return result;
     }
 
+    @Override
+    public byte[] removePadding(byte[] block) {
+        int idx = 0;
+        for (int i = block.length - 1; i >= 0; i--) {
+            if (block[i] != 0) {
+                idx = i;
+                break;
+            }
+        }
+        return Arrays.copyOf(block, idx + 1);
+    }
+
 }

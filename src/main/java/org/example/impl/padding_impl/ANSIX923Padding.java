@@ -1,6 +1,9 @@
 package org.example.impl.padding_impl;
 
 import org.example.interfaces.IPadding;
+import org.example.utils.BitUtils;
+
+import java.util.Arrays;
 
 public class ANSIX923Padding implements IPadding {
 
@@ -17,6 +20,12 @@ public class ANSIX923Padding implements IPadding {
         result[requiredSizeInBytes - 1] = (byte) paddedBytes;
 
         return result;
+    }
+
+    @Override
+    public byte[] removePadding(byte[] block) {
+        int count = BitUtils.getUnsignedByte(block[block.length - 1]);
+        return Arrays.copyOf(block, block.length - count);
     }
 
 }
