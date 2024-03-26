@@ -2,8 +2,8 @@ package org.example.interfaces;
 
 public interface IPadding {
 
-    public byte[] padBlock(byte[] block, int requiredSizeInBits);
+    public byte[] makePadding(byte[] text, int requiredSizeInBytes);
 
-    public byte[] removePadding(byte[] block);
+    public byte[] removePadding(byte[] text);
 
 }

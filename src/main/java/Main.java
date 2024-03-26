@@ -6,29 +6,11 @@ public class Main {
         byte[] key = {0x25, 0x25, 0x25, 0x25, 0x25, 0x25, 0x25, 0x25};
         DES des = new DES(key);
 
-        byte[] source = {5, 3, 103, 25, 76, 30, 12, 4};
-        byte[] ciphered = des.encryptBlock(source);
-        for (var el : source) {
-            System.out.print(el);
-            System.out.print(" ");
-        }
-        System.out.println();
-
-        for (var el : ciphered) {
-            System.out.print(el);
-            System.out.print(" ");
-        }
-        System.out.println();
-
-        byte[] decrypted = des.decryptBlock(ciphered);
-        for (var el : decrypted) {
-            System.out.print(el);
-            System.out.print(" ");
-        }
-        System.out.println();
-
         CipherService cipherService = new CipherService(key, CipherService.CipherMode.ECB, CipherService.Padding.ZEROS, des);
+        String inputFile = "path_to_file";
+        String outputFile = "path_to_file";
 
+        cipherService.encrypt(inputFile, outputFile);
 //        int num = 49478;
 //        System.out.println(Integer.toBinaryString(num));
 //        int res = BitUtils.lCircularShift(num, 16, 30);

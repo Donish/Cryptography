@@ -8,24 +8,26 @@ import java.util.Arrays;
 public class ANSIX923Padding implements IPadding {
 
     @Override
-    public byte[] padBlock(byte[] block, int requiredSizeInBits) {
-        int requiredSizeInBytes = requiredSizeInBits / 8;
-        int paddedBytes = requiredSizeInBytes - block.length;
-        byte[] result = new byte[requiredSizeInBytes];
-        System.arraycopy(block, 0, result, 0, block.length);
-
-        for (int i = block.length; i < requiredSizeInBytes - 1; i++) {
-            result[i] = 0;
+    public byte[] makePadding(byte[] text, int requiredSizeInBytes) {
+        byte[] result;
+        boolean isMultiple = text.length % requiredSizeInBytes == 0;
+        if (isMultiple) {
+            result = new byte[text.length + requiredSizeInBytes];
+        } else {
+            result = new byte[text.length + (requiredSizeInBytes - text.length % requiredSizeInBytes)];
         }
-        result[requiredSizeInBytes - 1] = (byte) paddedBytes;
+        int paddedBytes = requiredSizeInBytes - (text.length % requiredSizeInBytes);
+        System.arraycopy(text, 0, result, 0, text.length);
+
+        result[result.length - 1] = (byte) paddedBytes;
 
         return result;
     }
 
     @Override
-    public byte[] removePadding(byte[] block) {
-        int count = BitUtils.getUnsignedByte(block[block.length - 1]);
-        return Arrays.copyOf(block, block.length - count);
+    public byte[] removePadding(byte[] text) {
+        int count = BitUtils.getUnsignedByte(text[text.length - 1]);
+        return Arrays.copyOf(text, text.length - count);
     }
 
 }
