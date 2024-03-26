@@ -19,12 +19,12 @@ import java.util.List;
 
 public class CipherService {
 
-    private byte[] key;
-    private ICipherMode cipherMode;
-    private IPadding padding;
+    private final byte[] key;
+    private final ICipherMode cipherMode;
+    private final IPadding padding;
     private byte[] IV = null;
     private List<String> modeArgs = null;
-    private IAlgorithm algorithm;
+    private final IAlgorithm algorithm;
     private int byteBlockSize;
 
     private final int FILE_BLOCK_SIZE = 2097152;
@@ -37,6 +37,8 @@ public class CipherService {
         ZEROS, ANSIX923, PKCS7, ISO10126
     }
 
+    //TODO: подавать название алгоритма в конструктор и создавать алгоритм уже в конструкторе
+    //TODO: распараллелить шифрование и дешифрование
     public CipherService(byte[] key, CipherMode cipherMode, Padding padding, IAlgorithm algorithm) {
         if (key == null) {
             throw new RuntimeException("passed null key to CipherService");
@@ -102,8 +104,8 @@ public class CipherService {
         List<byte[]> list = new ArrayList<>();
         byte[] block;
 
-        for (int i = 0; i < text.length; i++) {
-            block = Arrays.copyOfRange(text, i * byteBlockSize, i * byteBlockSize + byteBlockSize);
+        for (int i = 0; i < text.length; i += byteBlockSize) {
+            block = Arrays.copyOfRange(text, i, i + byteBlockSize);
             byte[] encryptedBlock = cipherMode.encryptWithMode(block, IV, modeArgs, algorithm);
             list.add(encryptedBlock);
         }
@@ -134,9 +136,39 @@ public class CipherService {
     }
 
     private byte[] decryptFileBlock(byte[] text) {
-        return new byte[0];
+        text = padding.removePadding(text);
+        List<byte[]> list = new ArrayList<>();
+        byte[] block;
+
+        for (int i = 0; i < text.length; i += byteBlockSize) {
+            block = Arrays.copyOfRange(text, i, i + byteBlockSize);
+            byte[] decryptedBlock = cipherMode.decryptWithMode(block, IV, modeArgs, algorithm);
+            list.add(decryptedBlock);
+        }
+
+        byte[] decryptedText = list.stream()
+                .collect(
+                        ByteArrayOutputStream::new,
+                        (b, e) -> b.write(e, 0, e.length),
+                        (a, b) -> {}).toByteArray();
+
+        return decryptedText;
     }
 
     public void decrypt(String inputFilename, String outputFilename) {
+        File inputFile = new File(inputFilename);
+        if (!inputFile.exists()) {
+            throw new RuntimeException("file " + inputFilename + " doesn't exist");
+        }
+
+        long fileSize = inputFile.length();
+        byte[] fileBlock;
+        byte[] decryptedBlock;
+
+        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += (FILE_BLOCK_SIZE + byteBlockSize)) {
+            fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE + byteBlockSize, bytesRead);
+            decryptedBlock = decryptFileBlock(fileBlock);
+            FileUtils.writeFileBlock(outputFilename, decryptedBlock);
+        }
     }
 }

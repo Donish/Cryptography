@@ -1,7 +1,5 @@
 package org.example.utils;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -11,8 +9,8 @@ import java.util.stream.IntStream;
 
 public class FileUtils {
 
-    public String getFilePath(String filename) {
-        return Objects.requireNonNull(getClass().getClassLoader().getResource(".")).getPath() + filename;
+    public static String getFilePath(String filename) {
+        return Objects.requireNonNull(FileUtils.class.getClassLoader().getResource(".")).getPath() + filename;
     }
 
     public static byte[] readFileBlock(String filePath, int fileBlockSize, long offset) {
