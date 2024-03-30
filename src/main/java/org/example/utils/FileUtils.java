@@ -2,10 +2,7 @@ package org.example.utils;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 public class FileUtils {
 
@@ -16,17 +13,15 @@ public class FileUtils {
     public static byte[] readFileBlock(String filePath, int fileBlockSize, long offset) {
         try (RandomAccessFile file = new RandomAccessFile(filePath, "r")) {
             file.seek(offset);
-            int bytesRead = 0;
-            long fileLength = file.length();
-            List<Byte> block = new ArrayList<>();
+            byte[] result;
 
-            while (bytesRead < fileBlockSize && file.getFilePointer() < fileLength) {
-                block.add(file.readByte());
-                bytesRead++;
+            if (file.length() - offset < fileBlockSize) {
+                result = new byte[(int) (file.length() - file.getFilePointer())];
+            } else {
+                result = new byte[fileBlockSize];
             }
+            file.read(result);
 
-            byte[] result = new byte[bytesRead];
-            IntStream.range(0, bytesRead).forEach(i -> result[i] = block.get(i));
             return result;
 
         } catch (IOException e) {

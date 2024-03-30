@@ -11,10 +11,8 @@ import org.example.interfaces.ICipherMode;
 import org.example.interfaces.IPadding;
 import org.example.utils.FileUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CipherService {
@@ -38,7 +36,6 @@ public class CipherService {
     }
 
     //TODO: подавать название алгоритма в конструктор и создавать алгоритм уже в конструкторе
-    //TODO: распараллелить шифрование и дешифрование
     public CipherService(byte[] key, CipherMode cipherMode, Padding padding, IAlgorithm algorithm) {
         if (key == null) {
             throw new RuntimeException("passed null key to CipherService");
@@ -101,22 +98,7 @@ public class CipherService {
 
     private byte[] encryptFileBlock(byte[] text) {
         text = padding.makePadding(text, byteBlockSize);
-        List<byte[]> list = new ArrayList<>();
-        byte[] block;
-
-        for (int i = 0; i < text.length; i += byteBlockSize) {
-            block = Arrays.copyOfRange(text, i, i + byteBlockSize);
-            byte[] encryptedBlock = cipherMode.encryptWithMode(block, IV, modeArgs, algorithm);
-            list.add(encryptedBlock);
-        }
-
-        byte[] cipheredText = list.stream()
-                .collect(
-                        ByteArrayOutputStream::new,
-                        (b, e) -> b.write(e, 0, e.length),
-                        (a, b) -> {}).toByteArray();
-
-        return cipheredText;
+        return cipherMode.encryptWithMode(text, IV, modeArgs, algorithm, byteBlockSize);
     }
 
     public void encrypt(String inputFilename, String outputFilename) {
@@ -137,22 +119,7 @@ public class CipherService {
 
     private byte[] decryptFileBlock(byte[] text) {
         text = padding.removePadding(text);
-        List<byte[]> list = new ArrayList<>();
-        byte[] block;
-
-        for (int i = 0; i < text.length; i += byteBlockSize) {
-            block = Arrays.copyOfRange(text, i, i + byteBlockSize);
-            byte[] decryptedBlock = cipherMode.decryptWithMode(block, IV, modeArgs, algorithm);
-            list.add(decryptedBlock);
-        }
-
-        byte[] decryptedText = list.stream()
-                .collect(
-                        ByteArrayOutputStream::new,
-                        (b, e) -> b.write(e, 0, e.length),
-                        (a, b) -> {}).toByteArray();
-
-        return decryptedText;
+        return cipherMode.decryptWithMode(text, IV, modeArgs, algorithm, byteBlockSize);
     }
 
     public void decrypt(String inputFilename, String outputFilename) {
@@ -165,7 +132,7 @@ public class CipherService {
         byte[] fileBlock;
         byte[] decryptedBlock;
 
-        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += (FILE_BLOCK_SIZE + byteBlockSize)) {
+        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += FILE_BLOCK_SIZE + byteBlockSize) {
             fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE + byteBlockSize, bytesRead);
             decryptedBlock = decryptFileBlock(fileBlock);
             FileUtils.writeFileBlock(outputFilename, decryptedBlock);

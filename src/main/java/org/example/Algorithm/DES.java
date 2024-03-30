@@ -1,6 +1,5 @@
 package org.example.Algorithm;
 
-import lombok.Getter;
 import org.example.feistel_network.FeistelNetwork;
 import org.example.impl.conversion_impl.DESConversion;
 import org.example.impl.round_key_impl.DESKeyGenerator;
@@ -8,6 +7,7 @@ import org.example.interfaces.IAlgorithm;
 import org.example.utils.BitUtils;
 
 public final class DES implements IAlgorithm {
+
     private final int byteBlockSize = 8;
 
     private final int[] StartPBlock =

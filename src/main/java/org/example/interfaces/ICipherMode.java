@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface ICipherMode {
 
-    public byte[] encryptWithMode(byte[] block, byte[] IV, List<String> parameters, IAlgorithm algorithm);
+    public byte[] encryptWithMode(byte[] text, byte[] IV, List<String> parameters, IAlgorithm algorithm, int blockSize);
 
-    public byte[] decryptWithMode(byte[] cipherBlock, byte[] IV, List<String> parameters, IAlgorithm algorithm);
+    public byte[] decryptWithMode(byte[] cipheredText, byte[] IV, List<String> parameters, IAlgorithm algorithm, int blockSize);
 
 }
