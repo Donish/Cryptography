@@ -1,6 +1,6 @@
 package org.example.cipher;
 
-import org.example.Algorithm.DES;
+import org.example.algorithm.DES;
 import org.example.impl.cipher_mode_impl.*;
 import org.example.impl.padding_impl.ANSIX923Padding;
 import org.example.impl.padding_impl.ISO10126Padding;

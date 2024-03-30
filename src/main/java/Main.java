@@ -1,4 +1,4 @@
-import org.example.Algorithm.DES;
+import org.example.algorithm.DES;
 import org.example.cipher.CipherService;
 
 public class Main {

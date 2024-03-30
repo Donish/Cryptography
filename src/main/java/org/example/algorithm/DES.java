@@ -1,4 +1,4 @@
-package org.example.Algorithm;
+package org.example.algorithm;
 
 import org.example.feistel_network.FeistelNetwork;
 import org.example.impl.conversion_impl.DESConversion;
