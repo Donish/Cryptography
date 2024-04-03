@@ -2,10 +2,7 @@ package org.example.cipher;
 
 import org.example.algorithm.DES;
 import org.example.impl.cipher_mode_impl.*;
-import org.example.impl.padding_impl.ANSIX923Padding;
-import org.example.impl.padding_impl.ISO10126Padding;
-import org.example.impl.padding_impl.PKCS7Padding;
-import org.example.impl.padding_impl.ZerosPadding;
+import org.example.impl.padding_impl.*;
 import org.example.interfaces.IAlgorithm;
 import org.example.interfaces.ICipherMode;
 import org.example.interfaces.IPadding;
@@ -118,8 +115,7 @@ public class CipherService {
     }
 
     private byte[] decryptFileBlock(byte[] text) {
-        text = padding.removePadding(text);
-        return cipherMode.decryptWithMode(text, IV, modeArgs, algorithm, byteBlockSize);
+        return padding.removePadding(cipherMode.decryptWithMode(text, IV, modeArgs, algorithm, byteBlockSize));
     }
 
     public void decrypt(String inputFilename, String outputFilename) {
