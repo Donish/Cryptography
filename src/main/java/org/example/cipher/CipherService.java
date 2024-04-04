@@ -32,7 +32,6 @@ public class CipherService {
         ZEROS, ANSIX923, PKCS7, ISO10126
     }
 
-    //TODO: подавать название алгоритма в конструктор и создавать алгоритм уже в конструкторе
     public CipherService(byte[] key, CipherMode cipherMode, Padding padding, IAlgorithm algorithm) {
         if (key == null) {
             throw new RuntimeException("passed null key to CipherService");
@@ -78,18 +77,25 @@ public class CipherService {
         }
     }
 
+    public CipherService(byte[] key, CipherMode cipherMode, Padding padding, IAlgorithm algorithm, byte[] IV) {
+        this(key, cipherMode, padding, algorithm);
+        if (IV == null) {
+            throw new RuntimeException("passed null to Cipher");
+        }
+        this.IV = IV.clone();
+    }
+
     public CipherService(byte[] key,
                          CipherMode cipherMode,
                          Padding padding,
                          IAlgorithm algorithm,
                          byte[] IV,
                          List<String> modeArgs) {
-        this(key, cipherMode, padding, algorithm);
+        this(key, cipherMode, padding, algorithm, IV);
 
-        if (IV == null || modeArgs == null) {
+        if (modeArgs == null) {
             throw new RuntimeException("passed null to Cipher");
         }
-        this.IV = IV.clone();
         this.modeArgs = new ArrayList<>(modeArgs);
     }
 

@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class ECBMode implements ICipherMode {
     @Override
-    public byte[] encryptWithMode(byte[] text, byte[] notUsed, List<String> parameters, IAlgorithm algorithm, int blockSize) {
+    public byte[] encryptWithMode(byte[] text, byte[] notUsed, List<String> notUsed2, IAlgorithm algorithm, int blockSize) {
         byte[] result = new byte[text.length];
         IntStream.range(0, text.length / blockSize)
                 .parallel()
@@ -23,7 +23,7 @@ public class ECBMode implements ICipherMode {
     }
 
     @Override
-    public byte[] decryptWithMode(byte[] cipheredText, byte[] notUsed, List<String> parameters, IAlgorithm algorithm, int blockSize) {
+    public byte[] decryptWithMode(byte[] cipheredText, byte[] notUsed, List<String> notUsed2, IAlgorithm algorithm, int blockSize) {
         byte[] result = new byte[cipheredText.length];
         IntStream.range(0, cipheredText.length / blockSize)
                 .parallel()
