@@ -14,13 +14,16 @@ public class CBCMode implements ICipherMode {
     public byte[] encryptWithMode(byte[] text, byte[] IV, List<String> notUsed, IAlgorithm algorithm, int blockSize) {
         byte[] prevBlock = IV;
         byte[] result = new byte[text.length];
-        for (int i = 0; i < text.length / blockSize; i++) {
+        int blocksCount = text.length / blockSize;
+
+        for (int i = 0; i < blocksCount; i++) {
             int idx = i * blockSize;
             byte[] block = Arrays.copyOfRange(text, idx, idx + blockSize);
             byte[] encryptedBlock = algorithm.encryptBlock(BitUtils.xorArrays(prevBlock, block));
             System.arraycopy(encryptedBlock, 0, result, idx, encryptedBlock.length);
             prevBlock = encryptedBlock;
         }
+
         return result;
     }
 

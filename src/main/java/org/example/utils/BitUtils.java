@@ -81,11 +81,11 @@ public class BitUtils {
         byte[] result = new byte[Math.max(firstArr.length, secondArr.length)];
         byte[] largeArr, smallArr;
         if (firstArr.length > secondArr.length) {
-            largeArr = firstArr.clone();
-            smallArr = secondArr.clone();
+            largeArr = firstArr;
+            smallArr = secondArr;
         } else {
-            largeArr = secondArr.clone();
-            smallArr = firstArr.clone();
+            largeArr = secondArr;
+            smallArr = firstArr;
         }
         int diff = largeArr.length - smallArr.length;
 
