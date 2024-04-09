@@ -5,7 +5,7 @@ import org.example.utils.BitUtils;
 
 import java.util.Arrays;
 
-public class PKCS7Padding implements IPadding {
+public final class PKCS7Padding implements IPadding {
 
     @Override
     public byte[] makePadding(byte[] text, int requiredSizeInBytes) {

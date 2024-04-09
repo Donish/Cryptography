@@ -4,7 +4,7 @@ import org.example.interfaces.IPadding;
 
 import java.util.Arrays;
 
-public class ZerosPadding implements IPadding {
+public final class ZerosPadding implements IPadding {
 
     @Override
     public byte[] makePadding(byte[] text, int requiredSizeInBytes) {

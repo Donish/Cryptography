@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface ICipher {
 
-    public byte[] encrypt(byte[] text);
+    byte[] encrypt(byte[] text);
 
-    public byte[] decrypt(byte[] text);
+    byte[] decrypt(byte[] text);
 
-    public List<byte[]> getRKeys(byte[] key);
+    List<byte[]> getRKeys(byte[] key);
 
 }

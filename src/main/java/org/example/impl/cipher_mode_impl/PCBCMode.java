@@ -7,7 +7,7 @@ import org.example.utils.BitUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCBCMode implements ICipherMode {
+public final class PCBCMode implements ICipherMode {
 
     @Override
     public byte[] encryptWithMode(byte[] text, byte[] IV, List<String> notUsed, IAlgorithm algorithm, int blockSize) {

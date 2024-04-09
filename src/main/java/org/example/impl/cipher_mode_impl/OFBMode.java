@@ -7,7 +7,7 @@ import org.example.utils.BitUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class OFBMode implements ICipherMode {
+public final class OFBMode implements ICipherMode {
 
     @Override
     public byte[] encryptWithMode(byte[] text, byte[] IV, List<String> parameters, IAlgorithm algorithm, int blockSize) {

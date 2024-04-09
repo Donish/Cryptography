@@ -6,7 +6,7 @@ import org.example.utils.BitUtils;
 import java.util.Arrays;
 import java.util.Random;
 
-public class ISO10126Padding implements IPadding {
+public final class ISO10126Padding implements IPadding {
 
     @Override
     public byte[] makePadding(byte[] text, int requiredSizeInBytes) {

@@ -5,7 +5,7 @@ import org.example.utils.BitUtils;
 
 import java.util.Arrays;
 
-public class ANSIX923Padding implements IPadding {
+public final class ANSIX923Padding implements IPadding {
 
     @Override
     public byte[] makePadding(byte[] text, int requiredSizeInBytes) {

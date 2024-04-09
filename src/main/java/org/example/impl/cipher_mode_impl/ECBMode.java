@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class ECBMode implements ICipherMode {
+public final class ECBMode implements ICipherMode {
     @Override
     public byte[] encryptWithMode(byte[] text, byte[] notUsed, List<String> notUsed2, IAlgorithm algorithm, int blockSize) {
         byte[] result = new byte[text.length];

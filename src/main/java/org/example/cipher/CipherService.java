@@ -8,9 +8,17 @@ import org.example.interfaces.ICipherMode;
 import org.example.interfaces.IPadding;
 import org.example.utils.FileUtils;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.CompletionHandler;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class CipherService {
 
@@ -21,6 +29,8 @@ public class CipherService {
     private List<String> modeArgs = null;
     private final IAlgorithm algorithm;
     private int byteBlockSize;
+
+    // TODO: словарь режимов и паддингов
 
     private final int FILE_BLOCK_SIZE = 2097152;
 
@@ -105,19 +115,20 @@ public class CipherService {
     }
 
     public void encrypt(String inputFilename, String outputFilename) {
-        File inputFile = new File(inputFilename);
-        if (!inputFile.exists()) {
-            throw new RuntimeException("file " + inputFile + " doesn't exist");
-        }
-        long fileSize = inputFile.length();
-        byte[] fileBlock;
-        byte[] cipheredBlock;
-
-        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += FILE_BLOCK_SIZE) {
-            fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE, bytesRead);
-            cipheredBlock = encryptFileBlock(fileBlock);
-            FileUtils.writeFileBlock(outputFilename, cipheredBlock);
-        }
+        readFile(inputFilename, outputFilename, true);
+//        File inputFile = new File(inputFilename);
+//        if (!inputFile.exists()) {
+//            throw new RuntimeException("file " + inputFile + " doesn't exist");
+//        }
+//        long fileSize = inputFile.length();
+//        byte[] fileBlock;
+//        byte[] cipheredBlock;
+//
+//        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += FILE_BLOCK_SIZE) {
+//            fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE, bytesRead);
+//            cipheredBlock = encryptFileBlock(fileBlock);
+//            FileUtils.writeFileBlock(outputFilename, cipheredBlock);
+//        }
     }
 
     private byte[] decryptFileBlock(byte[] text) {
@@ -125,19 +136,73 @@ public class CipherService {
     }
 
     public void decrypt(String inputFilename, String outputFilename) {
-        File inputFile = new File(inputFilename);
-        if (!inputFile.exists()) {
-            throw new RuntimeException("file " + inputFilename + " doesn't exist");
-        }
+        readFile(inputFilename, outputFilename, false);
+//        File inputFile = new File(inputFilename);
+//        if (!inputFile.exists()) {
+//            throw new RuntimeException("file " + inputFilename + " doesn't exist");
+//        }
+//
+//        long fileSize = inputFile.length();
+//        byte[] fileBlock;
+//        byte[] decryptedBlock;
+//
+//        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += FILE_BLOCK_SIZE + byteBlockSize) {
+//            fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE + byteBlockSize, bytesRead);
+//            decryptedBlock = decryptFileBlock(fileBlock);
+//            FileUtils.writeFileBlock(outputFilename, decryptedBlock);
+//        }
+    }
 
-        long fileSize = inputFile.length();
-        byte[] fileBlock;
-        byte[] decryptedBlock;
+    private void readFile(String fileName, String outputFileName, boolean isEncrypt) {
+        Path path = Paths.get(fileName);
+        try (AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ)) {
+            long fileSize = fileChannel.size();
+            long position = 0;
 
-        for (long bytesRead = 0L; bytesRead < fileSize; bytesRead += FILE_BLOCK_SIZE + byteBlockSize) {
-            fileBlock = FileUtils.readFileBlock(inputFilename, FILE_BLOCK_SIZE + byteBlockSize, bytesRead);
-            decryptedBlock = decryptFileBlock(fileBlock);
-            FileUtils.writeFileBlock(outputFilename, decryptedBlock);
+            while (position < fileSize) {
+                CompletableFuture<ByteBuffer> readFuture = readChunk(fileChannel, position, isEncrypt);
+                ByteBuffer byteBuffer = readFuture.get();
+
+                if (byteBuffer.position() > 0) {
+                    byteBuffer.flip();
+                    byte[] text = new byte[byteBuffer.remaining()];
+                    byteBuffer.get(text);
+
+                    byte[] cipheredChunk = isEncrypt ? encryptFileBlock(text) : decryptFileBlock(text);
+                    //TODO: асинхронная запись в файл
+                    FileUtils.writeFileBlock(outputFileName, cipheredChunk);
+                    byteBuffer.clear();
+                } else {
+                    break;
+                }
+                position += isEncrypt ? FILE_BLOCK_SIZE : FILE_BLOCK_SIZE + byteBlockSize;
+            }
+
+        } catch (IOException | InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
+
+    private CompletableFuture<ByteBuffer> readChunk(AsynchronousFileChannel fileChannel, long position, boolean isEncrypt) {
+        ByteBuffer byteBuffer = isEncrypt ? ByteBuffer.allocate(FILE_BLOCK_SIZE) : ByteBuffer.allocate(FILE_BLOCK_SIZE + byteBlockSize);
+
+        CompletableFuture<Integer> future = new CompletableFuture<>();
+        fileChannel.read(byteBuffer, position, byteBuffer, new CompletionHandler<>() {
+            @Override
+            public void completed(Integer result, ByteBuffer attachment) {
+                future.complete(result);
+            }
+
+            @Override
+            public void failed(Throwable exc, ByteBuffer attachment) {}
+        });
+
+        return future.thenApply(readBytes -> byteBuffer);
+    }
 }
+
+
+
+
+
+
