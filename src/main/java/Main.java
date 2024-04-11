@@ -8,14 +8,14 @@ public class Main {
         DES des = new DES(key);
 
         CipherService cipherService = new CipherService(key,
-                CipherService.CipherMode.ECB,
+                CipherService.CipherMode.CTR,
                 CipherService.Padding.ANSIX923,
                 des,
                 IV);
 
-        String inputFile = "C:/photo/source.jpg";
+        String inputFile = "C:/photo/video.mp4";
         String outputFile = "C:/photo/encrypted.txt";
-        String decryptedFile = "C:/photo/decrypted.jpg";
+        String decryptedFile = "C:/photo/decrypted.mp4";
 
         cipherService.encrypt(inputFile, outputFile);
         cipherService.decrypt(outputFile, decryptedFile);
