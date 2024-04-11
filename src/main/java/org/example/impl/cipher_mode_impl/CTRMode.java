@@ -22,7 +22,7 @@ public final class CTRMode implements ICipherMode {
                     byte[] block = Arrays.copyOfRange(text, idx, idx + blockSize);
                     byte[] toEncrypt = new byte[blockSize];
                     System.arraycopy(IV, 0, toEncrypt, 0, length);
-                    System.arraycopy(BitUtils.intToByteArr(i), 0, toEncrypt, length, length);
+                    System.arraycopy(BitUtils.intToByteArr(i), 0, toEncrypt, toEncrypt.length - Integer.BYTES, length);
                     byte[] encryptedBlock = BitUtils.xorArrays(block, algorithm.encryptBlock(toEncrypt));
                     System.arraycopy(encryptedBlock, 0, result, idx, encryptedBlock.length);
                 });
@@ -42,7 +42,7 @@ public final class CTRMode implements ICipherMode {
                     byte[] block = Arrays.copyOfRange(cipheredText, idx, idx + blockSize);
                     byte[] toDecrypt = new byte[blockSize];
                     System.arraycopy(IV, 0, toDecrypt, 0, length);
-                    System.arraycopy(BitUtils.intToByteArr(i), 0, toDecrypt, length, length);
+                    System.arraycopy(BitUtils.intToByteArr(i), 0, toDecrypt, toDecrypt.length - Integer.BYTES, length);
                     byte[] decryptedBlock = BitUtils.xorArrays(block, algorithm.encryptBlock(toDecrypt));
                     System.arraycopy(decryptedBlock, 0, result, idx, decryptedBlock.length);
                 });
