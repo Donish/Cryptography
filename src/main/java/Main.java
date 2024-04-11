@@ -8,7 +8,7 @@ public class Main {
         DES des = new DES(key);
 
         CipherService cipherService = new CipherService(key,
-                CipherService.CipherMode.CTR,
+                CipherService.CipherMode.RandomDelta,
                 CipherService.Padding.ANSIX923,
                 des,
                 IV);
